@@ -8,7 +8,7 @@ public class Validation {
         
         String[] parties = operation.trim().split("\\s+");
         if (parties.length != 3) return false;
-        
+       
         try {
             Double.parseDouble(parties[0]);
             Double.parseDouble(parties[2]);

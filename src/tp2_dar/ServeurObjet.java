@@ -8,7 +8,7 @@ public class ServeurObjet {
     
     public static void main(String[] args) {
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
-            
+           
             System.out.println("Serveur démarré sur le port " + PORT);
             System.out.println("En attente de connexions clients...");
             

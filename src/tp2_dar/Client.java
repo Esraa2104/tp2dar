@@ -7,7 +7,6 @@ import java.util.Scanner;
 public class Client {
     private static final String SERVEUR_HOST = "localhost";
     private static final int SERVEUR_PORT = 12345;
-
     public static void main(String[] args) {
         try (Scanner scanner = new Scanner(System.in)) {
             System.out.println("Connexion au serveur " + SERVEUR_HOST + ":" + SERVEUR_PORT);
