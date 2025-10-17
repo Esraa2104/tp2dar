@@ -1,4 +1,5 @@
 package tp2_dar;
+
 import java.io.*;
 import java.net.*;
 import java.util.Scanner;
@@ -9,24 +10,20 @@ public class Client {
 
     public static void main(String[] args) {
         try (Scanner scanner = new Scanner(System.in)) {
-            System.out.println("Client de calculatrice distribuée");
             System.out.println("Connexion au serveur " + SERVEUR_HOST + ":" + SERVEUR_PORT);
-
-            while (true) {
-                System.out.println("\nEntrez une opération:");
-                System.out.println("Opérateurs supportés: +, -, *, /");
-                System.out.print("> ");
-
+ 
+            while (true) { 
+              	System.out.print(" Entrez une opération : ");
                 String operation = scanner.nextLine().trim();
 
-                if (operation.equalsIgnoreCase("quit")) {
-                    System.out.println("Déconnexion...");
-                    break;
+                if (operation.isEmpty()) {
+                    continue;
                 }
 
-                // Validation basique côté client
+                // Validation améliorée côté client
                 if (!validerOperation(operation)) {
-                    System.out.println("Format invalide. Utilisez: nombre operateur nombre");
+                    System.out.println(" Format invalide. Utilisez: 'nombre opérateur nombre' (ex: 34 * 55)");
+                    System.out.println("   Opérateurs supportés: +, -, *, /");
                     continue;
                 }
 
@@ -37,7 +34,8 @@ public class Client {
     }
 
     private static boolean validerOperation(String operation) {
-        return operation.matches("\\d+\\s+[+\\-*/]\\s+\\d+");
+        // Validation identique à celle du serveur pour cohérence
+        return operation.matches("-?\\d+(\\.\\d+)?\\s+[+\\-*/]\\s+-?\\d+(\\.\\d+)?");
     }
 
     private static void envoyerOperation(String operation) {
@@ -49,18 +47,27 @@ public class Client {
             
             // Envoi de l'opération
             out.println(operation);
-            System.out.println("Opération envoyée: " + operation);
+            System.out.println(" Opération envoyée: " + operation);
 
             // Réception du résultat
             String resultat = in.readLine();
-            System.out.println("Résultat reçu: " + resultat);
+            
+            // Affichage formaté du résultat
+            if (resultat.startsWith("ERREUR:")) {
+                System.out.println(" " + resultat);
+            } else {
+                System.out.println(" Résultat: " + operation + " = " + resultat);
+            }
+            System.out.println("----------------------------------------");
 
         } catch (UnknownHostException e) {
-            System.err.println("Serveur introuvable: " + e.getMessage());
+            System.err.println(" Serveur introuvable: " + e.getMessage());
         } catch (ConnectException e) {
-            System.err.println("Impossible de se connecter au serveur. Vérifiez qu'il est démarré.");
+            System.err.println(" Impossible de se connecter au serveur. Vérifiez:");
+            System.err.println("   - Le serveur est-il démarré?");
+            System.err.println("   - Le port " + SERVEUR_PORT + " est-il correct?");
         } catch (IOException e) {
-            System.err.println("Erreur de communication: " + e.getMessage());
+            System.err.println(" Erreur de communication: " + e.getMessage());
         }
     }
 }
